@@ -9,14 +9,14 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-# 你的讯飞信息（已经填好，不用改）
+# 你的讯飞信息
 APPID = "c3da867f"
 APIKey = "5b816a733013339b4b8c54a44b1c9a672"
 APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBINWJ1"
 
 def get_auth_header():
     date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
-    signature_origin = f"host: api.xfyun.cn\ndate: {date}\nGET /v2/ise HTTP/1.1"
+    signature_origin = f"host: raasr.xfyun.cn\ndate: {date}\nGET /v2/api/ise HTTP/1.1"
     signature_sha = hmac.new(APISecret.encode(), signature_origin.encode(), digestmod=hashlib.sha256).digest()
     signature = base64.b64encode(signature_sha).decode()
     authorization_origin = f'api_key="{APIKey}", algorithm="hmac-sha256", headers="host date request-line", signature="{signature}"'
@@ -24,7 +24,7 @@ def get_auth_header():
     return {
         "Authorization": authorization,
         "Date": date,
-        "Host": "api.xfyun.cn"
+        "Host": "raasr.xfyun.cn"
     }
 
 @app.route('/evaluate', methods=['POST'])
@@ -44,11 +44,11 @@ def evaluate():
             "level": "sentence"
         }
 
-        url = "https://api.xfyun.cn/v2/ise"
+        # ✅ 修正为正确的讯飞ISE接口地址
+        url = "https://raasr.xfyun.cn/v2/api/ise"
         headers = get_auth_header()
         response = requests.post(url, headers=headers, json=params)
         
-        # 打印并返回讯飞原始响应，方便排查问题
         print("讯飞原始响应:", response.text)
         try:
             return jsonify(response.json())
