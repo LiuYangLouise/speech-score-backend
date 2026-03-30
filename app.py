@@ -7,9 +7,9 @@ import hmac
 import time
 
 app = Flask(__name__)
-CORS(app)  # 解决跨域问题，让前端能正常调用后端
+CORS(app)
 
-# 你的讯飞信息（已经填好，不用改）
+# 你的讯飞信息（已经帮你填好，不用动）
 APPID = "c3da867f"
 APIKey = "5b816a733013339b4b8c54a44b1c9a672"
 APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBINWJ1"
@@ -29,24 +29,30 @@ def get_auth_header():
 
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
-    audio_file = request.files['audio']
-    ref_text = request.form.get('ref_text', 'Hello')
-    audio_base64 = base64.b64encode(audio_file.read()).decode()
+    try:
+        audio_file = request.files['audio']
+        ref_text = request.form.get('ref_text', 'Hello')
+        audio_base64 = base64.b64encode(audio_file.read()).decode()
 
-    params = {
-        "app_id": APPID,
-        "language": "en",
-        "accent": "mandarin",
-        "text": ref_text,
-        "audio": audio_base64,
-        "audio_type": "wav",
-        "level": "sentence"
-    }
+        params = {
+            "app_id": APPID,
+            "language": "en",
+            "accent": "mandarin",
+            "text": ref_text,
+            "audio": audio_base64,
+            "audio_type": "wav",
+            "level": "sentence"
+        }
 
-    url = "https://api.xfyun.cn/v2/ise"
-    headers = get_auth_header()
-    response = requests.post(url, headers=headers, json=params)
-    return jsonify(response.json())
+        url = "https://api.xfyun.cn/v2/ise"
+        headers = get_auth_header()
+        response = requests.post(url, headers=headers, json=params)
+        
+        # 强制返回 JSON，保证前端能解析
+        return jsonify(response.json())
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route('/')
 def index():
