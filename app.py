@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 import base64
 import hashlib
@@ -6,11 +7,12 @@ import hmac
 import time
 
 app = Flask(__name__)
+CORS(app)  # 解决跨域问题，让前端能正常调用后端
 
-# 👉 改成你自己的讯飞信息
+# 你的讯飞信息（已经填好，不用改）
 APPID = "c3da867f"
-APIKey = "5b816a73013339b4b8c54a44b1c9a672"
-APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBlNWJl"
+APIKey = "5b816a733013339b4b8c54a44b1c9a672"
+APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBINWJ1"
 
 def get_auth_header():
     date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
