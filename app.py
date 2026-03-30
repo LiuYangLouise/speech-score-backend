@@ -8,9 +8,9 @@ import time
 app = Flask(__name__)
 
 # 👉 改成你自己的讯飞信息
-APPID = "你的讯飞AppID"
-APIKey = "你的讯飞APIKey"
-APISecret = "你的讯飞APISecret"
+APPID = "c3da867f"
+APIKey = "5b816a73013339b4b8c54a44b1c9a672"
+APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBlNWJl"
 
 def get_auth_header():
     date = time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
