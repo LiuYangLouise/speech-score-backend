@@ -9,7 +9,7 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-# 你的讯飞信息（已经帮你填好，不用动）
+# 你的讯飞信息（已经填好，不用改）
 APPID = "c3da867f"
 APIKey = "5b816a733013339b4b8c54a44b1c9a672"
 APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBINWJ1"
@@ -48,8 +48,15 @@ def evaluate():
         headers = get_auth_header()
         response = requests.post(url, headers=headers, json=params)
         
-        # 强制返回 JSON，保证前端能解析
-        return jsonify(response.json())
+        # 打印并返回讯飞原始响应，方便排查问题
+        print("讯飞原始响应:", response.text)
+        try:
+            return jsonify(response.json())
+        except Exception as json_err:
+            return jsonify({
+                "error": str(json_err),
+                "xf_raw_response": response.text
+            })
 
     except Exception as e:
         return jsonify({"error": str(e)})
