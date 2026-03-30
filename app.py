@@ -9,7 +9,7 @@ import time
 app = Flask(__name__)
 CORS(app)
 
-# 你的讯飞信息（已经填好）
+# 你的讯飞信息（不用改）
 APPID = "c3da867f"
 APIKey = "5b816a733013339b4b8c54a44b1c9a672"
 APISecret = "ZjY3MTRkMjA0ZDE4ZjQxODEyMDBINWJ1"
@@ -39,18 +39,10 @@ def evaluate():
             "data": {"status": 2, "audio": audio_base64}
         }
 
-        url = "https://api.xfyun.cn/v2/iat"
+        url = "https://api.xfyun.cn/v2/iat"  # 语音听写接口（你已开通）
         headers = get_auth_header()
         response = requests.post(url, headers=headers, json=params)
-        
-        print("讯飞原始响应:", response.text)
-        try:
-            return jsonify(response.json())
-        except Exception as json_err:
-            return jsonify({
-                "error": str(json_err),
-                "xf_raw_response": response.text
-            })
+        return jsonify(response.json())
 
     except Exception as e:
         return jsonify({"error": str(e)})
